@@ -41,12 +41,36 @@ def generate_round_3_pairs(songs):
 def matchups(pairs):
     print('CURRENT ROUND')
     for pair in pairs:
-        print(f'Song [A]: {pair[0].title}')
-        pair[0].elo_score += 200
-        print(f'Song [B]: {pair[1].title}')
-  
+        
+        print(f'Song [1]: {pair[0].title}')
+        print(f'Song [2]: {pair[1].title}')
+        choice = get_user_choice(2)
 
+        if choice == 1:
+            winner, loser = pair[0], pair[1]
+            print(winner.title)
+            print(winner.elo_score)
+        else:
+            winner, loser = pair[1], pair[0]
     
+
+# FOR MULTIPLE CHOICE
+def get_user_choice(num_options):
+    while True:
+        try:
+            # 1. Try to get and convert the input
+            choice = int(input(f"Pick a song (1-{num_options}): "))
+            
+            # 2. Check if the number is actually in range
+            if 1 <= choice <= num_options:
+                return choice
+            else:
+                print(f"❌ Please enter a number between 1 and {num_options}.")
+        except ValueError:
+            # 3. This runs if int() fails (e.g., user typed "abc")
+            print("⚠️ That's not a number! Try again.")
+    
+
 def update_elo(winner, loser):
     expected_winner = 1 / (1 + 10^((loser.rating - winner.rating) / 400))
     expected_loser = 1 - expected_winner
