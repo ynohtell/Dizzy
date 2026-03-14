@@ -19,12 +19,14 @@ def create_session(user_id: str , songs: List[dt.Song]) -> dt.Session:
     )
 
 
-def matchup_pairing(session, pair, round_number):
-    paired = [
-        dt.Matchup(song_a=pair[0], song_b=pair[1], round_number=round_number)
-        for p in pair
+def matchup_pairing(session, pairs, round_number):
+    if pairs is None:
+        return []
+    
+    return [
+        dt.Matchup(song_a=p[0], song_b=p[1], round_number=round_number)
+        for p in pairs 
     ]
-    return paired 
 
 def generate_round_1_pairs(songs):
     # 1. Shuffle
@@ -45,11 +47,54 @@ def generate_round_1_pairs(songs):
     return paired
 
 def generate_round_2_pairs(songs):
-    ...
+    # 1. Sort by rating
+    sorted_songs = sorted(songs, key=lambda s: s.rating, reverse=True)
+    
+    matchups = []
+    
+    # 2. Extract Wildcard (Rank 1 vs Rank 10)
+    # Be careful: Ensure you have at least 10 songs!
+    if len(sorted_songs) >= 10:
+        rank_1 = sorted_songs.pop(0)  # Remove first
+        rank_10 = sorted_songs.pop(8) # Remove what was index 9 (now 8)
+        matchups.append((rank_1, rank_10))
+    
+    # 3. Pair the rest adjacently (1v2, 3v4...)
+    # We use the same 'zip' trick you learned today!
+    matchups.extend(list(zip(sorted_songs[0::2], sorted_songs[1::2])))
+    
+    # 4. Handle odd numbers (if any remain)
+    if len(sorted_songs) % 2 != 0:
+        # Give the last person a random opponent from the already paired group
+        # (excluding the wildcard songs)
+        matchups.append((sorted_songs[-1], random.choice(sorted_songs[:-1])))
+        
+    return matchups
 
 
 def generate_round_3_pairs(songs):
-    ...
+    # 1. Sort by rating (Gasoline)
+    sorted_songs = sorted(songs, key=lambda s: s.rating, reverse=True)
+    
+    matchups = []
+
+    # 2. Extract Wildcard (Rank 2 vs Rank 9)
+    # Python indices: Rank 2 is index 1, Rank 9 is index 8
+    if len(sorted_songs) >= 9:
+        # Note: Pop the higher index first so the lower index doesn't shift!
+        rank_9 = sorted_songs.pop(8) 
+        rank_2 = sorted_songs.pop(1)
+        matchups.append((rank_2, rank_9))
+
+    # 3. Pair remaining adjacently
+    matchups.extend(list(zip(sorted_songs[0::2], sorted_songs[1::2])))
+
+    # 4. Final Odd-One-Out check
+    if len(sorted_songs) % 2 != 0:
+        matchups.append((sorted_songs[-1], random.choice(sorted_songs[:-1])))
+
+    return matchups
+
 
 def get_matchup_result(pair):
     """Handles exactly one matchup and returns the outcome."""
@@ -120,13 +165,21 @@ def submit_choice(session, winner_id):
 
 
 def advance_round(session):
-    next_round = session.current_round + 1
-    if next_round > 3:
-        print("Session already finished!")
+    session.current_round += 1
+    print(f"Current Round: {session.current_round}")
+    session.current_matchup_index = 0
+
+    if session.current_round > 3:
+        session.is_active = False
+        print("🏆 Tournament Complete!")
         return 
+    
     rounds = [generate_round_1_pairs, generate_round_2_pairs, generate_round_3_pairs]
-    paired = rounds[next_round](songs=session.songs)
-    session.matchups.append(paired)
+    round_func = rounds[session.current_round - 1]
+
+    raw_pairs = round_func(session.songs)
+
+    session.matchups = matchup_pairing(session, raw_pairs, session.current_round)
 
 
 # def get_next_available_match(session: Session) -> Optional[Matchup]:
