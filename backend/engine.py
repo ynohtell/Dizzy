@@ -190,11 +190,21 @@ def advance_round(session):
 
 
 def get_ranking(session):
-    ...
+    songs = session.songs
+    sorted_songs = sorted(songs, key=lambda s: s.rating, reverse=True)
+    display_songs(sorted_songs)
+
+    return sorted_songs
+    
+
+def display_songs(songs):
+    for rank, song in enumerate(songs, start=1):
+        print(f'{rank}. {song.title} ELO: {song.rating}')
+    return 
 
 
 def end_session(session):
     #  mark complete, return final ranking
     #  save playlist
     session.is_active = False
-    ...
+    return
