@@ -1,14 +1,15 @@
-from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Optional, List, Tuple
 import uuid  
+from pydantic import BaseModel, Field, ConfigDict
 
 """
    uuid is universal standard for generating session that is seraizliation ready
 """
 
-@dataclass
-class Song:
+class Song(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
     id: str
     title: str 
     artist: str 
@@ -16,28 +17,26 @@ class Song:
     genre: Optional[str] = None
     year: Optional[int] = None
 
-    rating: int = 1000
+    rating: int = Field(default=1000, ge=0) #'ge=0' ensures rating is Greater or Equal to 0
     wins: int = 0
     losses: int = 0
 
 
-@dataclass
-class Matchup:
+class Matchup(BaseModel):
     song_a: Song 
     song_b: Song
     round_number: int 
-    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     winner_id: Optional[str] = None
     
 
-@dataclass 
-class Session:
+class Session(BaseModel):
     user_id: str 
-    songs: List[Song] = field(default_factory=list)
-    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    songs: List[Song] = Field(default_factory=list)
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     current_round: int = 0
     is_active: bool = True
-    created_at: datetime = field(default_factory=datetime.now)
-    matchups: List[Matchup] = field(default_factory=list)
+    created_at: datetime = Field(default_factory=datetime.now)
+    matchups: List[Matchup] = Field(default_factory=list)
     current_matchup_index = int = 0
 

@@ -1,16 +1,5 @@
-import pytest
-from data_structure import Song, Session
-from engine import get_ranking, end_session
-
-
-@pytest.fixture
-def mock_session():
-    songs = [
-        Song(id="1", title="Low Rated", artist="A", rating=800),
-        Song(id="2", title="High Rated", artist="B", rating=1500),
-        Song(id="3", title="Mid Rated", artist="C", rating=1200)
-    ]
-    return Session(user_id="dev_user", songs=songs)
+from backend.engine import get_ranking, end_session
+import base_mock
 
 def test_get_ranking_order(mock_session, capsys):
     """
@@ -29,6 +18,7 @@ def test_get_ranking_order(mock_session, capsys):
     assert "1. High Rated" in captured.out
     assert "2. Mid Rated" in captured.out
     assert "3. Low Rated" in captured.out
+
 
 def test_end_session(mock_session):
     mock_session.is_active = True # Making sure it was true first
