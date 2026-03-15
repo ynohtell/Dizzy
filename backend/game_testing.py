@@ -1,6 +1,6 @@
 import pytest
 from data_structure import Song, Session
-from engine import get_ranking
+from engine import get_ranking, end_session
 
 
 @pytest.fixture
@@ -25,7 +25,12 @@ def test_get_ranking_order(mock_session, capsys):
     captured = capsys.readouterr()
 
 
-    print(captured.out)
+    # print(captured.out)
     assert "1. High Rated" in captured.out
     assert "2. Mid Rated" in captured.out
     assert "3. Low Rated" in captured.out
+
+def test_end_session(mock_session):
+    mock_session.is_active = True # Making sure it was true first
+    results = end_session(mock_session)
+    assert mock_session.is_active is False, "The session should be inactive after ending."
