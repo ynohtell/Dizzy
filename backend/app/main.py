@@ -1,7 +1,12 @@
 import json
 import engine
+from pathlib import Path
 
-with open('mock_tracks.json', 'r') as f:
+current_dir = Path(__file__).parent.parent
+json_path = current_dir / "tests" / "fixtures" / "mock_tracks.json"
+print(json_path)
+
+with open(json_path, 'r') as f:
     raw_data = json.load(f)
     f.close()
 
@@ -15,7 +20,7 @@ song_pool = [
 ]
     
 try:
-    session = engine.create_session(user_id=123, songs=song_pool)
+    session = engine.create_session(user_id="user_dev123", songs=song_pool)
     print(f"✅ Engine started! Session ID: {session.id}")
     while session.is_active:
         if session.current_round == 0:

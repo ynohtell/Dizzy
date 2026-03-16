@@ -1,4 +1,4 @@
-from app import get_ranking, end_session, create_session, advance_round
+from app import get_ranking, end_session, create_session, advance_round, submit_choice
 import pytest
 
 
@@ -47,6 +47,37 @@ def test_create_session_happy_path(song_pool):
     assert session.is_active is True
     assert len(session.songs) == len(song_pool)
     assert isinstance(session.id, str) # Verify UUID generation
+
+
+def test_submit_choice():
+    ...
+
+
+def test_advance_round_completes_at_round_4(song_pool):
+    # Arrange: Setup a session sitting at the end of Round 3
+    session = create_session(user_id="dev", songs=song_pool)
+    session.current_round = 3 
+    
+    # Act: Advance to Round 4
+    advance_round(session)
+    
+    # Assert: Verify the "Tournament Complete" state
+    assert session.current_round == 4
+    assert session.is_active is False 
+    assert session.current_matchup_index == 0
+
+
+def test_advance_round_generates_matchups(song_pool):
+    # Arrange: Starts at Round 0
+    session = create_session(user_id="dev", songs=song_pool)
+    
+    # Act: Move to Round 1
+    advance_round(session)
+    
+    # Assert: Verify Round 1 state
+    assert session.current_round == 1
+    assert len(session.matchups) > 0  # Verify logic actually ran
+    assert session.is_active is True
 
 
 def test_get_ranking_order(mock_session, capsys):

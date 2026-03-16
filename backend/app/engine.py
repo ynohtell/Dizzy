@@ -1,4 +1,4 @@
-import app.models as dt
+import models as dt
 from typing import List
 import random
 
@@ -28,6 +28,7 @@ def matchup_pairing(session, pairs, round_number):
         for p in pairs 
     ]
 
+
 def generate_round_1_pairs(songs):
     # 1. Shuffle
     shuffled = random.sample(songs, len(songs))
@@ -45,6 +46,7 @@ def generate_round_1_pairs(songs):
     
         
     return paired
+
 
 def generate_round_2_pairs(songs):
     # 1. Sort by rating
@@ -126,14 +128,18 @@ def get_user_choice(num_options):
             print("⚠️ That's not a number! Try again.")
     
 
-def update_elo(winner, loser):
+def update_elo(winner: dt.Song, loser: dt.Song):
+    # Calculate new ratings (Math stays the same)
     expected_winner = 1 / (1 + 10 ** ((loser.rating - winner.rating) / 400))
-    expected_loser = 1 - expected_winner
+    
+    new_w_rating = winner.rating + K * (1 - expected_winner)
+    new_l_rating = loser.rating + K * (0 - (1 - expected_winner))
 
-    winner.rating = winner.rating + K * (1 - expected_winner)
-    loser.rating = loser.rating + K * (0 - expected_loser)
+    # Pydantic way: Create new objects with updated values
+    updated_winner = winner.model_copy(update={"rating": new_w_rating, "wins": winner.wins + 1})
+    updated_loser = loser.model_copy(update={"rating": new_l_rating, "losses": loser.losses + 1})
 
-    return winner, loser
+    return updated_winner, updated_loser
 
 
 def submit_choice(session, winner_id):
@@ -166,13 +172,12 @@ def submit_choice(session, winner_id):
 
 def advance_round(session):
     session.current_round += 1
-    print(f"Current Round: {session.current_round}")
     session.current_matchup_index = 0
 
-    if session.current_round > 3:
+    MAX_ROUNDS = 3
+    if session.current_round > MAX_ROUNDS:
         session.is_active = False
-        print("🏆 Tournament Complete!")
-        return 
+        return session
     
     rounds = [generate_round_1_pairs, generate_round_2_pairs, generate_round_3_pairs]
     round_func = rounds[session.current_round - 1]
@@ -181,6 +186,7 @@ def advance_round(session):
 
     session.matchups = matchup_pairing(session, raw_pairs, session.current_round)
 
+    return session
 
 # def get_next_available_match(session: Session) -> Optional[Matchup]:
 #     for matchup in session.matchups:
