@@ -1,10 +1,12 @@
 import json
-import engine
+from backend.app import engine
+from backend.app.services import load_session, save_session
 from pathlib import Path
+
 
 current_dir = Path(__file__).parent.parent
 json_path = current_dir / "tests" / "fixtures" / "mock_tracks.json"
-print(json_path)
+
 
 with open(json_path, 'r') as f:
     raw_data = json.load(f)
@@ -20,21 +22,29 @@ song_pool = [
 ]
     
 try:
-    session = engine.create_session(user_id="user_dev123", songs=song_pool)
-    print(f"✅ Engine started! Session ID: {session.id}")
+
+    if Path("session_state.json").exists():
+        session = load_session("session_state.json")
+        print(f"Resuming Session: {session.id}")
+    else: 
+        session = engine.create_session(user_id="user_dev123", songs=song_pool)
+        print(f"✅ Engine started! Session ID: {session.id}")
+        engine.advance_round(session)
+
     while session.is_active:
-        if session.current_round == 0:
+        if session.current_matchup_index >= len(session.matchups):
             engine.advance_round(session)
+            if not session.is_active: break
 
-        if session.current_matchup_index < len(session.matchups):
+        m = session.matchups[session.current_matchup_index]
+        winner_obj, _ = engine.get_matchup_result((m.song_a, m.song_b))
 
-            m = session.matchups[session.current_matchup_index]
+        #Submit choice and Save
+        engine.submit_choice(session, winner_id=winner_obj.id)
+        save_session(session=session)
 
-            winner_obj, loser_obj = engine.get_matchup_result((m.song_a, m.song_b))
-
-            engine.submit_choice(session, winner_id=winner_obj.id)
-        else:
-            engine.advance_round(session)
+    print("🏆 Tournament Complete!")
+    engine.get_ranking(session)
 
 except ValueError as e:
     print(f"❌ {e}")

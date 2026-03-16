@@ -1,4 +1,4 @@
-import models as dt
+from backend.app import models as dt
 from typing import List
 import random
 
@@ -131,43 +131,42 @@ def get_user_choice(num_options):
 def update_elo(winner: dt.Song, loser: dt.Song):
     # Calculate new ratings (Math stays the same)
     expected_winner = 1 / (1 + 10 ** ((loser.rating - winner.rating) / 400))
+        
+    new_w_rating = round(winner.rating + K * (1 - expected_winner))
+    new_l_rating = round(loser.rating + K * (0 - (1 - expected_winner)))
     
-    new_w_rating = winner.rating + K * (1 - expected_winner)
-    new_l_rating = loser.rating + K * (0 - (1 - expected_winner))
-
-    # Pydantic way: Create new objects with updated values
-    updated_winner = winner.model_copy(update={"rating": new_w_rating, "wins": winner.wins + 1})
-    updated_loser = loser.model_copy(update={"rating": new_l_rating, "losses": loser.losses + 1})
-
-    return updated_winner, updated_loser
+    # Return the updated data as a dict for easier merging
+    return {
+        "winner_update": {"rating": new_w_rating, "wins": winner.wins + 1},
+        "loser_update": {"rating": new_l_rating, "losses": loser.losses + 1}
+    }
 
 
-def submit_choice(session, winner_id):
-    # 1. Get the current matchup using the 'Bookmark' index
+def submit_choice(session: dt.Session, winner_id: str):
     if session.current_matchup_index >= len(session.matchups):
-        print("Round already finished!")
         return
 
     current_match = session.matchups[session.current_matchup_index]
-    
-    # 2. Assign the winner inside the Matchup object
     current_match.winner_id = winner_id
     
-    # 3. Handle ELO (Logic you've already written)
-    # Identify objects based on ID
+    # 1. Identify winner/loser objects
     if current_match.song_a.id == winner_id:
-        winner, loser = current_match.song_a, current_match.song_b
+        w_obj, l_obj = current_match.song_a, current_match.song_b
     else:
-        winner, loser = current_match.song_b, current_match.song_a
+        w_obj, l_obj = current_match.song_b, current_match.song_a
         
-    update_elo(winner, loser)
+    # 2. Get the new stats
+    updates = update_elo(w_obj, l_obj)
 
-    # 4. CRITICAL: Move the bookmark forward
+    # 3. PERSISTENCE: Update the song in the MASTER list (session.songs)
+    # We find the song in the session and replace it with the updated version
+    for i, song in enumerate(session.songs):
+        if song.id == winner_id:
+            session.songs[i] = song.model_copy(update=updates["winner_update"])
+        if song.id == l_obj.id:
+            session.songs[i] = song.model_copy(update=updates["loser_update"])
+
     session.current_matchup_index += 1
-    
-    # Check if we need to end the round or the game
-    if session.current_matchup_index == len(session.matchups):
-        print("All matchups in this round are done!")
 
 
 def advance_round(session):
@@ -187,12 +186,6 @@ def advance_round(session):
     session.matchups = matchup_pairing(session, raw_pairs, session.current_round)
 
     return session
-
-# def get_next_available_match(session: Session) -> Optional[Matchup]:
-#     for matchup in session.matchups:
-#         if matchup.winner_id is None:
-#             return matchup
-#     return None # All matches in this round are done!
 
 
 def get_ranking(session):

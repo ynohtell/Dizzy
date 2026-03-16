@@ -1,0 +1,502 @@
+{
+    "user_id": "user_dev123",
+    "songs": [
+        {
+            "id": "4PT6vLT4AB3sbFG9B9m7vP",
+            "title": "Blinding Lights",
+            "artist": "The Weeknd",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "0VjIjW4GlWfyYn9pYq3S1j",
+            "title": "Stay",
+            "artist": "The Kid LAROI",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "37B9AbtmSjoSLy23vV7q4z",
+            "title": "As It Was",
+            "artist": "Harry Styles",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "177p69S7O97I006idqZ26L",
+            "title": "Heat Waves",
+            "artist": "Glass Animals",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 984,
+            "wins": 0,
+            "losses": 1
+        },
+        {
+            "id": "2n79G9uS397Xf6vM63S1S1",
+            "title": "Levitating",
+            "artist": "Dua Lipa",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "5enxwA8aAbwZbf5qOfmNI1",
+            "title": "Starboy",
+            "artist": "The Weeknd",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 984,
+            "wins": 0,
+            "losses": 1
+        },
+        {
+            "id": "7qiZfU419mRZZzQ0P8zd93",
+            "title": "Flowers",
+            "artist": "Miley Cyrus",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "1q8vAAbmSjoSLy23vV7v4z",
+            "title": "Cruel Summer",
+            "artist": "Taylor Swift",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1016,
+            "wins": 1,
+            "losses": 0
+        },
+        {
+            "id": "6XmUAbZbf5qOfmNI15enxw",
+            "title": "Shivers",
+            "artist": "Ed Sheeran",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 984,
+            "wins": 0,
+            "losses": 1
+        },
+        {
+            "id": "2i8AbtmSjoSLy23vV7qPz",
+            "title": "Bad Guy",
+            "artist": "Billie Eilish",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1016,
+            "wins": 1,
+            "losses": 0
+        },
+        {
+            "id": "3A79G9uS397Xf6vM63S2S2",
+            "title": "Good 4 U",
+            "artist": "Olivia Rodrigo",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "5PT6vLT4AB3sbFG9B9m8vP",
+            "title": "Save Your Tears",
+            "artist": "The Weeknd",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "0VjIjW4GlWfyYn9pYq4T2k",
+            "title": "Peaches",
+            "artist": "Justin Bieber",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1016,
+            "wins": 1,
+            "losses": 0
+        },
+        {
+            "id": "177p69S7O97I006idqZ37M",
+            "title": "Drivers License",
+            "artist": "Olivia Rodrigo",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "7qiZfU419mRZZzQ0P8ze04",
+            "title": "Anti-Hero",
+            "artist": "Taylor Swift",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 984,
+            "wins": 0,
+            "losses": 1
+        },
+        {
+            "id": "4XmUAbZbf5qOfmNI15fnxw",
+            "title": "Shape of You",
+            "artist": "Ed Sheeran",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "2n89G9uS397Xf6vM63S3S3",
+            "title": "Watermelon Sugar",
+            "artist": "Harry Styles",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "6PT6vLT4AB3sbFG9B9m9vQ",
+            "title": "Circles",
+            "artist": "Post Malone",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "0VjIjW4GlWfyYn9pYq5U3l",
+            "title": "Montero (Call Me By Your Name)",
+            "artist": "Lil Nas X",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1000,
+            "wins": 0,
+            "losses": 0
+        },
+        {
+            "id": "177p69S7O97I006idqZ48N",
+            "title": "Someone You Loved",
+            "artist": "Lewis Capaldi",
+            "spotify_id": null,
+            "genre": null,
+            "year": null,
+            "rating": 1016,
+            "wins": 1,
+            "losses": 0
+        }
+    ],
+    "id": "d23c8515-95ac-42f1-bbfb-cf7d207a3625",
+    "current_round": 1,
+    "is_active": true,
+    "created_at": "2026-03-16T16:37:28.823345",
+    "matchups": [
+        {
+            "song_a": {
+                "id": "0VjIjW4GlWfyYn9pYq4T2k",
+                "title": "Peaches",
+                "artist": "Justin Bieber",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "6XmUAbZbf5qOfmNI15enxw",
+                "title": "Shivers",
+                "artist": "Ed Sheeran",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "874fdfcf-fdf1-4f1c-9c92-88f3f733fdc1",
+            "winner_id": "0VjIjW4GlWfyYn9pYq4T2k"
+        },
+        {
+            "song_a": {
+                "id": "5enxwA8aAbwZbf5qOfmNI1",
+                "title": "Starboy",
+                "artist": "The Weeknd",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "2i8AbtmSjoSLy23vV7qPz",
+                "title": "Bad Guy",
+                "artist": "Billie Eilish",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "eb284722-262a-4613-9251-53e8753dc826",
+            "winner_id": "2i8AbtmSjoSLy23vV7qPz"
+        },
+        {
+            "song_a": {
+                "id": "1q8vAAbmSjoSLy23vV7v4z",
+                "title": "Cruel Summer",
+                "artist": "Taylor Swift",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "177p69S7O97I006idqZ26L",
+                "title": "Heat Waves",
+                "artist": "Glass Animals",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "228cf7e2-aa78-432d-8777-88835fff3767",
+            "winner_id": "1q8vAAbmSjoSLy23vV7v4z"
+        },
+        {
+            "song_a": {
+                "id": "7qiZfU419mRZZzQ0P8ze04",
+                "title": "Anti-Hero",
+                "artist": "Taylor Swift",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "177p69S7O97I006idqZ48N",
+                "title": "Someone You Loved",
+                "artist": "Lewis Capaldi",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "2e98d0e4-9729-4dd2-9950-1c081e54ef41",
+            "winner_id": "177p69S7O97I006idqZ48N"
+        },
+        {
+            "song_a": {
+                "id": "4XmUAbZbf5qOfmNI15fnxw",
+                "title": "Shape of You",
+                "artist": "Ed Sheeran",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "7qiZfU419mRZZzQ0P8zd93",
+                "title": "Flowers",
+                "artist": "Miley Cyrus",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "d7bfc615-2b9e-484f-b9a2-1bc310377dc6",
+            "winner_id": null
+        },
+        {
+            "song_a": {
+                "id": "37B9AbtmSjoSLy23vV7q4z",
+                "title": "As It Was",
+                "artist": "Harry Styles",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "0VjIjW4GlWfyYn9pYq5U3l",
+                "title": "Montero (Call Me By Your Name)",
+                "artist": "Lil Nas X",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "b2e1b75a-4aa6-4ec9-88f1-0b3554cf318b",
+            "winner_id": null
+        },
+        {
+            "song_a": {
+                "id": "3A79G9uS397Xf6vM63S2S2",
+                "title": "Good 4 U",
+                "artist": "Olivia Rodrigo",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "6PT6vLT4AB3sbFG9B9m9vQ",
+                "title": "Circles",
+                "artist": "Post Malone",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "07a32451-7f7a-41a3-b225-99eefe4255a4",
+            "winner_id": null
+        },
+        {
+            "song_a": {
+                "id": "5PT6vLT4AB3sbFG9B9m8vP",
+                "title": "Save Your Tears",
+                "artist": "The Weeknd",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "177p69S7O97I006idqZ37M",
+                "title": "Drivers License",
+                "artist": "Olivia Rodrigo",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "83760727-cbfd-4925-b3ee-d0b38937ec18",
+            "winner_id": null
+        },
+        {
+            "song_a": {
+                "id": "0VjIjW4GlWfyYn9pYq3S1j",
+                "title": "Stay",
+                "artist": "The Kid LAROI",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "2n79G9uS397Xf6vM63S1S1",
+                "title": "Levitating",
+                "artist": "Dua Lipa",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "be3e1750-96b2-4571-bd6e-bbc46ff13f59",
+            "winner_id": null
+        },
+        {
+            "song_a": {
+                "id": "2n89G9uS397Xf6vM63S3S3",
+                "title": "Watermelon Sugar",
+                "artist": "Harry Styles",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "song_b": {
+                "id": "4PT6vLT4AB3sbFG9B9m7vP",
+                "title": "Blinding Lights",
+                "artist": "The Weeknd",
+                "spotify_id": null,
+                "genre": null,
+                "year": null,
+                "rating": 1000,
+                "wins": 0,
+                "losses": 0
+            },
+            "round_number": 1,
+            "id": "23d4ade9-3aa5-4906-a0a4-a40be90cb6cd",
+            "winner_id": null
+        }
+    ],
+    "current_matchup_index": 4
+}
