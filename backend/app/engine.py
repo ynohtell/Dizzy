@@ -5,11 +5,11 @@ import random
 K = 32
 
 def create_session(user_id: str , songs: List[dt.Song]) -> dt.Session:
+    if not user_id or not str(user_id).strip():
+        raise ValueError("👤 Driver Error: No user_id provided.")
+
     if not songs or len(songs) < 2:
         raise ValueError("⛽ Engine Error: You need at least 2 songs to start a matchup!")
-
-    if not user_id:
-        raise ValueError("👤 Driver Error: No user_id provided.")
 
 
     return dt.Session(
