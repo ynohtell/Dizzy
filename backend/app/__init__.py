@@ -10,5 +10,5 @@ from .engine import  (
 
 # This one is for from app import *
 # __all__ represents functions the developer needs, avoiding too much functions getting export
-__all__ = ["Song", "Session", "Matchup", "create_session", "advance_round", "submit_choice", "get_ranking", "end_session"]
+__all__ = ["Song", "Session", "create_session", "advance_round", "submit_choice", "get_ranking", "end_session"]
 
