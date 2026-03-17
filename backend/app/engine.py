@@ -1,4 +1,4 @@
-from backend.app import models as dt
+from app import models as dt
 from typing import List
 import random
 
@@ -134,7 +134,7 @@ def update_elo(winner: dt.Song, loser: dt.Song):
         
     new_w_rating = round(winner.rating + K * (1 - expected_winner))
     new_l_rating = round(loser.rating + K * (0 - (1 - expected_winner)))
-    
+
     # Return the updated data as a dict for easier merging
     return {
         "winner_update": {"rating": new_w_rating, "wins": winner.wins + 1},

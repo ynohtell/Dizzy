@@ -1,10 +1,10 @@
 import json
-from backend.app import engine
-from backend.app.services import load_session, save_session
+from app import engine
+from app.services import load_session, save_session
 from pathlib import Path
 
 
-current_dir = Path(__file__).parent.parent
+current_dir = Path(__file__).parent
 json_path = current_dir / "tests" / "fixtures" / "mock_tracks.json"
 
 

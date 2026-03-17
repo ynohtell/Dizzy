@@ -1,4 +1,4 @@
-from backend.app import models as dt
+from app import models as dt
 from pathlib import Path
 
 
