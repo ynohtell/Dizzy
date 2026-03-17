@@ -34,6 +34,7 @@ try:
     while session.is_active:
         if session.current_matchup_index >= len(session.matchups):
             engine.advance_round(session)
+            print(f'Current Round: {session.current_round}')
             if not session.is_active: break
 
         m = session.matchups[session.current_matchup_index]
