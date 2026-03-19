@@ -5,7 +5,7 @@ from pathlib import Path
 def save_session(session: dt.Session, filepath: str = "session_state.json"):
     with open(filepath, "w") as f:
         f.write(session.model_dump_json(indent=4))
-    print(f"💾 Session saved to {filepath}")
+        return session
 
 def load_session(filepath: str = "session_state.json") -> dt.Session:
     if not Path(filepath).exists():

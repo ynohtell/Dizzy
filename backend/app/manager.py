@@ -9,22 +9,32 @@ from .models import Song, Session
 
 def manage_session(user_id: str):
     try:
-        user_session = f"{user_id}/{session.id}-session_state.json"
-        if Path(user_session).exists():
-            session = load_session(user_session)
-            return session
+        user_dir = Path(f'stored_sessions/{user_id}')
+        
+
+        if user_dir.exists():
+            for file in user_dir.glob('*.json'):
+                session = load_session(filepath=file)
+                if session.is_active:
+                    print("Session restored!")
+                    return session
         else: 
             song_pool = fetch_user_data(user_id)
             session = create_session(user_id=user_id, songs=song_pool)
-            advance_round(session)
-            return session
+            user_dir.mkdir()
+            if user_dir.exists():
+                file_path = f"stored_sessions/{user_id}/{session.id}.json"
+                session = save_session(session=session, filepath=file_path)
+                print("Session created!")
+                advance_round(session)
+                return session
     except ValueError as e:
         print(f"❌ {e}")
 
 
 def fetch_user_data(user_id: str):
     # User_id fetching to do
-    current_dir = Path(__file__).parent
+    current_dir = Path(__file__).parent.parent
     json_path = current_dir / "tests" / "fixtures" / "mock_tracks.json"
 
     

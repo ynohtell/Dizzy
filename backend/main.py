@@ -14,8 +14,6 @@ app = FastAPI(title="Dizzy API")
 def create_game(user_id: str):
     try:
         session = manager.manage_session(user_id)
-        file_path = f"{user_id}/{session.id}-session_state.json"
-        save_session(session=session, filepath=file_path)
         return session
     except ValueError as e:
         return HTTPException(status_code=400, detail=str(e))
