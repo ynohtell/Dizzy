@@ -1,8 +1,9 @@
 from app import models as dt
 from pathlib import Path
-
+import os 
 
 def save_session(session: dt.Session, filepath: str = "session_state.json"):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, "w") as f:
         f.write(session.model_dump_json(indent=4))
         return session

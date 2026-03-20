@@ -38,10 +38,10 @@ def submit_vote(user_id: str, session_id: str, winner_id: str):
         song_b = current_match.song_b
         
         if current_match.winner_id:
-            raise ValueError('dsdas')
+            raise ValueError('Current match already have winner')
         
         if not winner_id == song_a.id and not winner_id == song_b.id:
-            raise ValueError('dsadsa')
+            raise ValueError('Incorrect Winner ID')
 
         file_path = f"stored_sessions/{user_id}/{session.id}.json"
         record_match = engine.submit_choice(session=session, winner_id=winner_id)
@@ -56,7 +56,8 @@ def submit_vote(user_id: str, session_id: str, winner_id: str):
 def get_ranking(user_id: str, session_id: str):
     try:
         session = manager.locate_session(user_id=user_id, session_id=session_id)
-        ranking = engine.get_ranking(session.id)
-        return ranking 
+        if not session.is_active:
+            ranking = engine.get_ranking(session.id)
+            return ranking 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
