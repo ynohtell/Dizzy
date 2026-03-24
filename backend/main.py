@@ -22,7 +22,7 @@ def create_game(user_id: str):
 @app.get("/sessions/{user_id}/{session_id}/matchup")
 def get_current_matchup(user_id: str, session_id: str):
     try:
-        session = manager.locate_session(user_id=user_id, session_id=session_id)
+        session = manager.get_active_session(user_id=user_id, session_id=session_id)
         pair = manager.get_current_matchup(session=session)
         return pair
     except ValueError as e:
@@ -32,7 +32,7 @@ def get_current_matchup(user_id: str, session_id: str):
 @app.post("/sessions/{user_id}/{session_id}/choose")
 def submit_vote(user_id: str, session_id: str, winner_id: str):
     try:
-        session = manager.locate_session(user_id, session_id)
+        session = manager.get_active_session(user_id, session_id)
         if not session.is_active:
              ValueError('Session completed!')
              
@@ -57,11 +57,16 @@ def submit_vote(user_id: str, session_id: str, winner_id: str):
 @app.get('/sessions/{user_id}/{session_id}/ranking')
 def get_ranking(user_id: str, session_id: str):
     try:
-        session = manager.locate_session(user_id=user_id, session_id=session_id)
+        session = manager.get_inactive_session(user_id=user_id, session_id=session_id)
+        if session is None:
+            HTTPException(status_code=404, detail="Session not found")
+        
+        
         if session.is_active:
             raise ValueError('Session in progress.')
 
-        ranking = engine.get_ranking(session.id)
+
+        ranking = engine.get_ranking(session)
         return ranking 
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail="Session not found")

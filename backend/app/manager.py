@@ -9,7 +9,7 @@ from .models import Song, Session
 
 def manage_session(user_id: str):
     try:
-        restored_session = locate_session(user_id=user_id)
+        restored_session = get_active_session(user_id=user_id)
         if restored_session:
             print("Session restored!")
             return restored_session
@@ -61,7 +61,7 @@ def get_matchup_status(session: Session) -> Session:
     return session
 
 
-def locate_session(user_id: str, session_id: str = None) -> Session | None :
+def get_active_session(user_id: str, session_id: str = None) -> Session | None :
     user_dir = Path(f'stored_sessions/{user_id}')
 
     if user_dir.exists():
@@ -79,3 +79,24 @@ def locate_session(user_id: str, session_id: str = None) -> Session | None :
                     return session
     else:
         return None
+
+
+def get_inactive_session(user_id: str, session_id: str = None) -> Session | None :
+    user_dir = Path(f'stored_sessions/{user_id}')
+
+    if user_dir.exists():
+        if session_id:
+            file = Path(f'stored_sessions/{user_id}/{session_id}.json')
+            current_session = load_session(filepath=file)
+            if current_session and not current_session.is_active:
+                return current_session
+            else:
+                return None
+        else:
+            for file in user_dir.glob('*.json'):
+                session = load_session(filepath=file)
+                if session.is_active:
+                    return session
+    else:
+        return None
+    

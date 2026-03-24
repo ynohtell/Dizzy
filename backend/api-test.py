@@ -30,4 +30,8 @@ for i in range(30):
         if not track.get('is_active', True):
             print("🏁 Tournament finished. Fetching final rankings...")
             ranking = req.get(f"{BASE_URL}/sessions/{USER_ID}/{s_id}/ranking").json()
+            for index, song  in enumerate(ranking):
+                print(f'{index} Title: {song['title']} - {song['artist']} Rating: {song['rating']}')
             break
+
+
