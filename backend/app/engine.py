@@ -192,7 +192,6 @@ def advance_round(session):
 def get_ranking(session):
     songs = session.songs
     sorted_songs = sorted(songs, key=lambda s: s.rating, reverse=True)
-
     return sorted_songs
     
 

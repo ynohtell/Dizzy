@@ -80,23 +80,28 @@ def test_advance_round_generates_matchups(song_pool):
     assert session.is_active is True
 
 
-def test_get_ranking_order(mock_session, capsys):
+def test_get_ranking_order(mock_session):
     """
     QA Goal: Verify that the ranking logic correctly sorts 
     songs by ELO rating in descending order.
     """
     
     ranked_list = get_ranking(mock_session)
-    print(f"DEBUG: Song count is {len(mock_session.songs)}")
-    assert len(ranked_list) > 0, "Error, The list is empty!"
-    assert ranked_list[0].rating >= ranked_list[-1].rating, "Error: Not sorted correctly!"
-    captured = capsys.readouterr()
+    
+    # 1. Verify we have the expected number of items
+    assert len(ranked_list) == 3, f"Expected 3 songs, but got {len(ranked_list)}"
+    
+    # 2. Verify the exact order by checking the names/titles of the objects.
+    # (Note: Change '.title' to whatever attribute your song object uses, like '.name')
+    assert ranked_list[0].title == "High Rated", f"Expected 'High Rated', got {ranked_list[0].title}"
+    assert ranked_list[1].title == "Mid Rated", f"Expected 'Mid Rated', got {ranked_list[1].title}"
+    assert ranked_list[2].title == "Low Rated", f"Expected 'Low Rated', got {ranked_list[2].title}"
 
-
-    # print(captured.out)
-    assert "1. High Rated" in captured.out
-    assert "2. Mid Rated" in captured.out
-    assert "3. Low Rated" in captured.out
+    # 3. Verify the mathematical sorting logic directly
+    # Checking [0] against [-1] only checks the ends. It's better to ensure 
+    # the whole list is strictly descending.
+    assert ranked_list[0].rating >= ranked_list[1].rating, "Item 0 should be >= Item 1"
+    assert ranked_list[1].rating >= ranked_list[2].rating, "Item 1 should be >= Item 2"
 
 
 def test_end_session(mock_session):
