@@ -27,6 +27,9 @@ def create_game(user_id: str):
         return session
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        # Catching unexpected errors is good practice for stability
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @app.get("/sessions/{user_id}/{session_id}/matchup")
