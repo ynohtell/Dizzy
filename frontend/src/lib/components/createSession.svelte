@@ -15,8 +15,8 @@
     }
 </script>
 
-<div class="max-w-md mx-auto mt-10 p-8 bg-gray-900 rounded-2xl border border-gray-800 shadow-2xl">
-    <h3 class="text-2xl font-black text-white mb-6 tracking-tight">
+<div class="max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl border border-gray-800 shadow-2xl">
+    <h3 class="text-2xl font-black text-red-400 mb-6 tracking-tight">
         Start a new game
     </h3>
 
@@ -47,8 +47,8 @@
     </form>
 
     {#if status}
-        <p class="mt-4 text-center text-sm font-medium {status.includes('Error') ? 'text-red-400' : 'text-emerald-400'}">
+        <div class="fixed bottom-5 right-5 p-4 rounded-lg shadow-2xl bg-emerald-500 text-white font-bold animate-bounce">
             {status}
-        </p>
+        </div>
     {/if}
 </div>
