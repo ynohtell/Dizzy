@@ -1,0 +1,28 @@
+# 1. THE BASE: Start with a tiny Linux OS that has Python 3.12 and uv installed.
+FROM ghcr.io/astral-sh/uv:python3.12-slim
+
+# 2. THE HOUSE: Create a folder called /app inside that mini-linux. 
+# Every command after this happens inside /app.
+WORKDIR /app
+
+# 3. THE LOCKFILES: Copy ONLY these two files first.
+# Why? Because Docker "caches" steps. If your code changes but your 
+# dependencies don't, Docker skips the slow "install" step next time.
+COPY pyproject.toml uv.lock ./
+
+# 4. THE INSTALL: Run uv to install everything in the lockfile.
+# --frozen ensures it doesn't update anything; --no-dev keeps it light.
+RUN uv sync --frozen --no-install-project --no-dev
+
+# 5. THE CODE: Now copy the rest of your actual source code.
+COPY . .
+
+# 6. THE FINAL SYNC: Make sure the project itself is installed.
+RUN uv sync --frozen --no-dev
+
+# 7. THE PATH: Tell the container where the virtual environment lives.
+ENV PATH="/app/.venv/bin:$PATH"
+
+# 8. THE START: The command that actually runs when you start the container.
+# We use 0.0.0.0 so it listens to requests from outside the container (like your browser).
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -1,0 +1,21 @@
+# 1. THE BASE: Start with Node 20 on a slimmed-down Linux.
+FROM node:20-slim
+
+# 2. THE TOOL: Corepack is built into Node; we use it to activate pnpm.
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# 3. THE HOUSE: Create the workspace.
+WORKDIR /app
+
+# 4. THE CACHE: Just like the backend, copy lockfiles first.
+COPY package.json pnpm-lock.yaml ./
+
+# 5. THE INSTALL: Install dependencies. 
+# --frozen-lockfile is the pnpm version of "don't change my versions."
+RUN pnpm install --frozen-lockfile
+
+# 6. THE CODE: Copy your components, pages, etc.
+COPY . .
+
+# 7. THE START: Run the dev server.
+CMD ["pnpm", "run", "dev"]
