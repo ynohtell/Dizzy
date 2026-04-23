@@ -1,75 +1,56 @@
-<script>
-    const API_BASE = "http://localhost:8000"; 
-    const SESSION_ID = "test_dev1/0c205f22-5368-4265-b58d-d0e2876e9968";
+<script lang="ts">
+    import type { Session, Song } from '$lib/types';
 
-    async function getRankings () {
-        const response = await fetch(`${API_BASE}/sessions/${SESSION_ID}/ranking`)
+    // FIX 1: Open the door for the 'session' prop
+    export let session: Session;
 
-        if (!response.ok) {
-            throw new Error(`API Error: ${response.status}`)
-        } 
+    // FIX 2: Instead of a hardcoded ID, use the ID from the prop
+    // Or better yet, use the songs already inside the session object!
+    let sortedSongs: Song[] = [];
 
-        return await response.json()
+    // Reactive statement: Sort songs by rating whenever the session updates
+    $: if (session && session.songs) {
+        sortedSongs = [...session.songs].sort((a, b) => b.rating - a.rating);
     }
-    
-    let rankingPromise = getRankings();
 </script>
 
-<main>
-    <h2> Current Leaderboard </h2>
+<div class="max-w-2xl mx-auto mt-8">
+    <h2 class="text-4xl font-black uppercase italic mb-8 tracking-tighter">
+        Final Standings
+    </h2>
 
-    {#await rankingPromise}
-        <p class="loading">Fetching ELO ratings...</p>
-    {:then songs}
-        {#if songs.length === 0}
-            <p>No songs have been ranked yet.</p>
-        {:else}
-            <ol>
-                {#each songs as song}
-                    <li>
-                        <span class="title">{song.title}</span>
-                        <span class="score">{song.rating} ELO</span>
-                    </li>                
+    <div class="border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-black text-white uppercase text-sm">
+                <tr>
+                    <th class="p-4 border-b-4 border-black">Rank</th>
+                    <th class="p-4 border-b-4 border-black">Song</th>
+                    <th class="p-4 border-b-4 border-black text-right">ELO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each sortedSongs as song, i}
+                    <tr class="group hover:bg-[#bef264] transition-colors border-b-2 border-black last:border-0">
+                        <td class="p-4 font-black italic text-2xl">#{i + 1}</td>
+                        <td class="p-4">
+                            <div class="font-black uppercase text-lg">{song.title}</div>
+                            <div class="text-xs font-bold text-gray-500 uppercase">{song.artist}</div>
+                        </td>
+                        <td class="p-4 text-right">
+                            <span class="bg-black text-[#bef264] px-3 py-1 font-black rounded-full text-sm">
+                                {song.rating}
+                            </span>
+                        </td>
+                    </tr>
                 {/each}
-            </ol>
-        {/if}
-    {:catch error}
-        <p class="error">Failed to load: {error.message}</p>
-    {/await}
-</main>
+            </tbody>
+        </table>
+    </div>
 
-<style>
-  main {
-    font-family: system-ui, sans-serif;
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: #1e1e24;
-    color: #fff;
-    border-radius: 8px;
-  }
-  
-  ol {
-    padding-left: 1.5rem;
-  }
-
-  li {
-    margin-bottom: 0.75rem;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.25rem;
-  }
-
-  .title {
-    font-weight: bold;
-  }
-
-  .score {
-    color: #4ade80; 
-  }
-
-  .error {
-    color: #f87171;
-  }
-</style>
+    <button 
+        on:click={() => window.location.href = '/'}
+        class="mt-12 w-full py-4 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+               hover:bg-yellow-400 font-black uppercase transition-all active:shadow-none active:translate-x-[4px]">
+        Start New Session
+    </button>
+</div>

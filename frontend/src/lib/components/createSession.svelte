@@ -1,5 +1,6 @@
 <script lang="ts">
     import {createSession} from '$lib/api';
+    import { goto } from '$app/navigation';
 
     let userId = "";
     let status = "";
@@ -7,8 +8,14 @@
     async function handleSubmit() {
         try {
             const data = await createSession(userId)
-            status = "Session created";
+            status = "Session created, Redirecting...";
             console.log(data);
+
+            if (data && data.id) {
+                // Navigate to the game route
+                goto(`/game/${data.id}`);
+            }
+            
         } catch (e: any) {
             status = e.message;
         }
