@@ -1,16 +1,36 @@
-# Hoisting: Bringing these to the "Surface"
 from .models import Song, Session
-from .engine import  (
-    create_session, 
-    get_ranking, 
-    end_session, 
-    advance_round, 
-    submit_choice
+
+from .engine import (
+    create_session,
+    get_ranking,
+    end_session,
+    advance_round,
+    submit_choice,
 )
+
 from .manager import manage_session
 
+from .services import (
+    hydrate_session_songs,
+    upgrade_existing_songs,
+    save_session,
+    load_session,
+)
 
-# This one is for from app import *
-# __all__ represents functions the developer needs, avoiding too much functions getting export
-__all__ = ["Song", "Session", "create_session", "advance_round", "submit_choice", "get_ranking", "end_session", "manage_session"]
+__all__ = [
+    "Song",
+    "Session",
 
+    "create_session",
+    "advance_round",
+    "submit_choice",
+    "get_ranking",
+    "end_session",
+
+    "manage_session",
+
+    "hydrate_session_songs",
+    "upgrade_existing_songs",
+    "save_session",
+    "load_session",
+]

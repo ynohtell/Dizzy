@@ -1,53 +1,164 @@
+import os
+import time
 import requests
-import uuid
-from typing import List, Optional
-from app import models as dt
+import spotipy
 
-class MusicHydrator:
-    """
-    Service to 'hydrate' song objects with metadata from Apple Music API.
-    Streamlines the merge between Spotify identifiers and Apple playback.
-    """
-    
-    def __init__(self, developer_token: str, storefront: str = "us"):
-        self.token = developer_token
-        self.headers = {"Authorization": f"Bearer {developer_token}"}
-        self.base_url = f"https://api.music.apple.com/v1/catalog/{storefront}/search"
+from typing import List
+from spotipy.oauth2 import SpotifyOAuth
 
-    def fetch_apple_metadata(self, title: str, artist: str) -> dict:
-        """Calls Apple Music API to find metadata for a specific song."""
-        params = {"term": f"{title} {artist}", "types": "songs", "limit": 1}
-        try:
-            response = requests.get(self.base_url, headers=self.headers, params=params)
-            response.raise_for_status()
-            data = response.json()
-            
-            if "results" in data and "songs" in data["results"]:
-                song_data = data["results"]["songs"]["data"][0]["attributes"]
-                return {
-                    "apple_music_id": data["results"]["songs"]["data"][0]["id"],
-                    "artwork_url": song_data["artwork"]["url"].replace("{w}x{h}", "300x300"),
-                    "preview_url": song_data["previews"][0]["url"] if song_data.get("previews") else None,
-                    "year": int(song_data["releaseDate"][:4]) if song_data.get("releaseDate") else None,
-                    "genre": song_data["genreNames"][0] if song_data.get("genreNames") else None
-                }
-        except Exception as e:
-            print(f"⚠️ Metadata fetch failed for {title}: {e}")
-        return {}
+from ..models import Song
 
-    def hydrate_session_songs(self, spotify_songs: List[dict]) -> List[dt.Song]:
-        """Merges Spotify base data with Apple Music metadata."""
-        hydrated_songs = []
-        for s in spotify_songs:
-            metadata = self.fetch_apple_metadata(s['title'], s['artist'])
-            
-            # MERGE LOGIC: Combine Spotify Identity + Apple Metadata
-            song = dt.Song(
-                id=str(uuid.uuid4()), # We generate a fresh internal ID
-                title=s['title'],
-                artist=s['artist'],
-                spotify_id=s.get('id'),
-                **metadata # Unpacks apple_music_id, artwork_url, preview_url, etc.
+
+# -----------------------------------------
+# Lazy Spotify Client
+# -----------------------------------------
+
+_sp = None
+
+
+def get_spotify_client():
+    global _sp
+
+    if _sp is None:
+        _sp = spotipy.Spotify(
+            auth_manager=SpotifyOAuth(
+                client_id=os.getenv("SPOTIPY_CLIENT_ID"),
+                client_secret=os.getenv("SPOTIPY_CLIENT_SECRET"),
+                redirect_uri=os.getenv("SPOTIPY_REDIRECT_URI"),
+                scope="user-read-recently-played user-top-read user-library-read",
+                open_browser=False,
             )
-            hydrated_songs.append(song)
-        return hydrated_songs
+        )
+
+    return _sp
+
+
+# -----------------------------------------
+# Apple Metadata Lookup
+# -----------------------------------------
+
+def get_apple_metadata(artist: str, title: str) -> dict:
+    try:
+        query = f"{artist} {title}"
+
+        res = requests.get(
+            "https://itunes.apple.com/search",
+            params={
+                "term": query,
+                "media": "music",
+                "entity": "song",
+                "limit": 1,
+                "country": "PH",
+            },
+            timeout=5,
+        )
+
+        if res.status_code == 200:
+            results = res.json().get("results", [])
+            return results[0] if results else {}
+
+    except Exception as e:
+        print(f"⚠️ Apple lookup failed: {artist} - {title} | {e}")
+
+    return {}
+
+
+# -----------------------------------------
+# Full Hydration
+# -----------------------------------------
+
+def hydrate_session_songs(raw_songs: list) -> List[Song]:
+    if not raw_songs:
+        return []
+
+    sp = get_spotify_client()
+
+    spotify_ids = [song["id"] for song in raw_songs if song.get("id")]
+    sp_results = sp.tracks(spotify_ids)["tracks"]
+
+    sp_map = {
+        track["id"]: track
+        for track in sp_results
+        if track
+    }
+
+    hydrated = []
+
+    for song_data in raw_songs:
+        s_id = song_data["id"]
+        sp_meta = sp_map.get(s_id)
+
+        if not sp_meta:
+            continue
+
+        artist = song_data["artist"]
+        title = song_data["title"]
+
+        apple = get_apple_metadata(artist, title)
+
+        song = Song(
+            id=s_id,
+            title=title,
+            artist=artist,
+            spotify_id=s_id,
+
+            apple_music_id=str(apple.get("trackId")) if apple else None,
+            artwork_url=apple.get("artworkUrl100") if apple else None,
+            preview_url=apple.get("previewUrl") if apple else None,
+            genre=apple.get("primaryGenreName") if apple else None,
+
+            album_name=sp_meta["album"]["name"],
+            year=int(sp_meta["album"]["release_date"][:4]),
+
+            rating=song_data.get("rating", 1000),
+            wins=song_data.get("wins", 0),
+            losses=song_data.get("losses", 0),
+        )
+
+        hydrated.append(song)
+        time.sleep(0.1)
+
+    return hydrated
+
+
+# -----------------------------------------
+# Upgrade Existing Sessions (Apple only)
+# -----------------------------------------
+
+def upgrade_existing_songs(raw_songs: list) -> List[Song]:
+    upgraded = []
+
+    for song_data in raw_songs:
+        # 1. Create a copy so we don't mess up the original list
+        data = song_data.copy()
+        
+        artist = data.get("artist")
+        title = data.get("title")
+
+        # 2. Get Apple metadata
+        apple = get_apple_metadata(artist, title)
+
+        # 3. Update the dictionary only if the fields are missing/null
+        # This avoids the "multiple values" error
+        if not data.get("apple_music_id") and apple:
+            data["apple_music_id"] = str(apple.get("trackId"))
+            
+        if not data.get("artwork_url") and apple:
+            data["artwork_url"] = apple.get("artworkUrl100")
+            
+        if not data.get("preview_url") and apple:
+            data["preview_url"] = apple.get("previewUrl")
+            
+        if not data.get("genre") and apple:
+            data["genre"] = apple.get("primaryGenreName")
+
+        # 4. Now unpack the cleaned dictionary into the model
+        try:
+            song = Song(**data)
+            upgraded.append(song)
+        except Exception as e:
+            print(f"⚠️ Validation failed for {title}: {e}")
+            
+        time.sleep(0.1)
+
+    return upgraded
